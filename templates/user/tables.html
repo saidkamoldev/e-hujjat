@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hujjatlar</title>
+
+    {% include '../modules/links.html' %}
+
+    <link rel="stylesheet" href="/static/admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css" />
+
+    <style>
+      tr.--succeed td,
+      tr.--succeed th {
+        background-color: rgb(223, 255, 223);
+      }
+      
+      tr.--expired td,
+      tr.--expired th {
+        background-color: rgb(255, 236, 236);
+      }
+      
+      .table-responsive .row {
+        margin: 0;
+      }
+    </style>
+  </head>
+
+  <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+      {% include './modules/preloader.html' %}
+
+      {% include './modules/navbar.html' %}
+
+      {% include './modules/sidebar.html' %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0">Hujjatlar</h1>
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item">
+                    <a href="/custom_admin/">Asosiy sahifa</a>
+                  </li>
+                  <li class="breadcrumb-item active">Hujjatlar</li>
+                </ol>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row pb-5">
+              <div class="col">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h5 id="header_title" class="m-0">Hujjatlar ro'yxati</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive p-0">
+                      <table id="requests-table" class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>ID</th>
+                            <th>Yuboruvchi ismi</th>
+                            <th>Qayerga yuborilmoqda</th>
+                            <th>Ro'yhatdan o'tgan vaqt</th>
+                            <th>Holat</th>
+                            <th>Amallar</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% if tables %}
+                            {% for table in tables %}
+                              <tr data-date="{{ table.created_at|date:'Y-m-d H:i' }}" data-status="{{ table.status }}">
+                                <th>{{ forloop.counter }}</th>
+                                <td>8/K-{{ table.id|stringformat:'04d' }}</td>
+                                <td>{{ table.user.name }}</td>
+                                <td>{{ table.organization.title }}</td>
+                                <td class="date">{{ table.created_at|date:'Y-m-d H:i' }}</td>
+                                <td>
+                                  {% if table.status == True %}
+                                    <span class="badge badge-success">Qabul qilingan</span>
+                                  {% else %}
+                                    <span class="badge badge-secondary">Kutilmoqda</span>
+                                  {% endif %}
+                                </td>
+                                <td>
+                                  {% if table.status != True and not table.no_id%}
+                                    <form action="{% url 'user_status_change' %}" method="POST" style="display: inline-block;">
+                                      {% csrf_token %}
+                                      <input type="hidden" name="id" value="{{ table.id }}" />
+                                      <input type="hidden" name="status" value="Active" />
+                                      <button class="btn btn-success" type="submit">Qabul qilish</button>
+                                    </form>
+                                  {% endif %}
+                                  {% if not table.no_id%}
+                                  <a class="btn btn-primary edit-btn" href="/custom_user/requests/update?id={{ table.id }}">Tahrirlash</a>
+                                  {% endif %}
+                                </td>
+                              </tr>
+                            {% endfor %}
+                          {% else %}
+                            <tr>
+                              <td colspan="7">Hehc qanday ma'lumot yo'q</td>
+                            </tr>
+                          {% endif %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div> <!-- / card-body -->
+                  <div class="card-footer text-right">
+                    <a class="btn btn-primary edit-btn" href="/custom_user/requests/create/">Yaratish</a>
+                  </div>
+                </div> <!-- / card card-primary card-outline -->
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+
+    {% include '../modules/scripts.html' %}
+
+    <script src="/static/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/static/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/static/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/static/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/static/admin/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/static/admin/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/static/admin/plugins/jszip/jszip.min.js"></script>
+    <script src="/static/admin/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/static/admin/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/static/admin/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/static/admin/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/static/admin/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+
+    <script>
+      function isDateMoreThan30Days(dateString) {
+        const inputDate = new Date(dateString.replace(' ', 'T'))
+        const currentDate = new Date()
+      
+        const timeDifference = currentDate - inputDate
+      
+        const thirtyDaysInMillis = 30 * 24 * 60 * 60 * 1000
+      
+        return timeDifference >= thirtyDaysInMillis
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#requests-table tbody tr').forEach(function (tr) {
+          let status = tr.dataset.status
+          let date = tr.dataset.date
+      
+          if (status == 'True') tr.classList.add('--succeed')
+          else if (isDateMoreThan30Days(date)) tr.classList.add('--expired')
+        })
+      })
+      
+      $(document).ready(function () {
+        $('#requests-table').DataTable({
+          dom: 'Bftip',
+          buttons: ['copy', 'excel', 'pdf'],
+          paging: true,
+          lengthChange: false,
+          searching: true,
+          ordering: true,
+          info: false,
+          autoWidth: false,
+          responsive: false
+        })
+      })
+    </script>
+  </body>
+</html>

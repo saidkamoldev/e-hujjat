@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>E-Hujjat</title>
+
+    {% include '../modules/links.html' %}
+  </head>
+
+  <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+      {% include './modules/preloader.html' %}
+
+      {% include './modules/navbar.html' %}
+
+      {% include './modules/sidebar.html' %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0">Boshqaruv paneli</h1>
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item active">Asosiy</li>
+                </ol>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <!-- Sticker row -->
+            <div class="row">
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-info">
+                  <div class="inner">
+                    <h3>{{ all_count }}</h3>
+
+                    <p>Jami hujjatlar</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-folder"></i>
+                  </div>
+                  <a href="/custom_admin/requests/" class="small-box-footer">Batafsil ma'lumot <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-warning">
+                  <div class="inner">
+                    <h3>{{ inactive_count }}</h3>
+
+                    <p>Amaldagi hujjatlar</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+                  </div>
+                  <a href="/custom_admin/requests/" class="small-box-footer">Batafsil ma'lumot <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-success">
+                  <div class="inner">
+                    <h3>{{ active_count }}</h3>
+
+                    <p>Qabul qilingan hujjatlar</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fas fa-check"></i>
+                  </div>
+                  <a href="/custom_admin/requests/" class="small-box-footer">Batafsil ma'lumot <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-danger">
+                  <div class="inner">
+                    <h3>{{ inactive_old_count }}</h3>
+
+                    <p>Muddati o'tgan hujjatlar</p>
+                  </div>
+                  <div class="icon">
+                    <i class="fa fa-calendar-times"></i>
+                  </div>
+                  <a href="/custom_admin/requests/" class="small-box-footer">Batafsil ma'lumot <i class="fas fa-arrow-circle-right"></i></a>
+                </div>
+              </div>
+              <!-- ./col -->
+            </div>
+            <!-- /Sticker row -->
+
+            <!-- Chart Row -->
+
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Tashkilotlar statistikasi</h3>
+                  </div>
+                  <div class="card-body">
+                    <div style="max-width: 1106px; margin: 0 auto;">
+                      <canvas id="diagram"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- /Chart Row -->
+
+            <!-- Table last n requests -->
+            <div class="row">
+              <div class="col">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Tashkilotlar</h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="table-responsive p-0">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Address</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for org in array_organizations %}
+                            <tr>
+                              <th>{{ forloop.counter }}</th>
+                              <td>{{ org }}</td>
+                              <td>-</td>
+                              <td>-</td>
+                              <td>-</td>
+                            </tr>
+                          {% endfor %}
+                          {% comment %} {% if tables %}
+                            {% for table in tables %}
+                              <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>8/K-{{ table.id|stringformat:'04d' }}</td>
+                                <td>{{ table.user.name }}</td>
+                                <td>{{ table.organization.title }}</td>
+                                <td>{{ table.status|yesno:'Active,Inactive' }}</td>
+                                <td>{{ table.created_at|date:'Y-m-d H:i' }}</td>
+                              </tr>
+                            {% endfor %}
+                          {% else %}
+                            <tr>
+                              <td colspan="7">Ma'lumotlar mavjud emas</td>
+                            </tr>
+                          {% endif %} {% endcomment %}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+              </div>
+            </div>
+            <!-- /Table last n requests -->
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+
+    {% include '../modules/scripts.html' %}
+
+    <!-- Chart JS -->
+    <script src="/static/admin/plugins/chart.js/Chart.min.js"></script>
+    <script>
+      const COLORS = ['#36a2eb', '#ff6384', '#4bc0c0', '#ff9f40', '#9966ff', '#ffcd56', '#c9cbcf']
+      
+      const pie_labels = eval(`{{array_organizations|safe}}`)
+      const pie_data = eval(`{{array_count_organizations|safe}}`)
+      const pie_bgcolors = pie_labels.map(function (_, i) {
+        return COLORS[i % COLORS.length]
+      })
+      
+      const diagram = document.getElementById('diagram')
+      
+      const pie = new Chart(diagram, {
+        type: 'pie',
+        data: {
+          labels: pie_labels,
+          datasets: [
+            {
+              label: 'Все обращения',
+              data: pie_data,
+              backgroundColor: pie_bgcolors,
+              hoverOffset: 4
+            }
+          ]
+        }
+      })
+      
+      const graph = document.getElementById('graph')
+      
+      const line = new Chart(graph, {
+        type: 'line',
+        data: {
+          labels: ['10.10.24', '11.10.24', '12.10.24', '13.10.24'],
+          datasets: [
+            {
+              label: 'Кол-во обращений',
+              data: [65, 59, 80, 81],
+              fill: false,
+              borderColor: 'rgb(75, 192, 192)',
+              tension: 0.1
+            }
+          ]
+        }
+      })
+    </script>
+  </body>
+</html>

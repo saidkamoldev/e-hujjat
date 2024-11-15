@@ -1,0 +1,38 @@
+{% load static %}
+<!-- Google Font: Source Sans Pro -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="{% static '/admin/plugins/fontawesome-free/css/all.min.css' %}" />
+<!-- Theme style -->
+<link rel="stylesheet" href="{% static '/admin/dist/css/adminlte.min.css' %}" />
+<!-- overlayScrollbars -->
+<link rel="stylesheet" href="{% static '/admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}" />
+
+<style>
+  .nav-item.menu-open {
+    background-color: rgb(101, 106, 114, 0.29);
+    border-radius: 0.25rem;
+    margin-bottom: 0.2rem;
+    transition: 0.1s;
+  }
+  
+  /* .nav-item.menu-open>ul>li:last-child>a {
+      			margin-bottom: 0;
+      		} */
+</style>
+
+<style>
+  tr.--succeed td,
+  tr.--succeed th {
+    background-color: rgb(223, 255, 223);
+  }
+  
+  tr.--expired td,
+  tr.--expired th {
+    background-color: rgb(255, 236, 236);
+  }
+  
+  .table-responsive .row {
+    margin: 0;
+  }
+</style>

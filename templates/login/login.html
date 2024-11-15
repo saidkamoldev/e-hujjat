@@ -1,0 +1,55 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Kirish</title>
+
+    {% include '../modules/links.html' %}
+  </head>
+
+  <body class="register-page" style="min-height: 570.781px;">
+    <div class="register-box">
+      <div class="register-logo">
+        <a href="/"><b>E-Hujjat</b></a>
+      </div>
+      <div class="card">
+        <div class="card-body register-card-body">
+          <p class="login-box-msg">E-hujjat platformasiga xush kelibsiz</p>
+          <form method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <input type="email" class="form-control" name="email" placeholder="Email" required />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-envelope"></span>
+                </div>
+              </div>
+            </div>
+            <div class="input-group mb-3">
+              <input type="password" class="form-control" name="password" placeholder="Password" required />
+              <div class="input-group-append">
+                <div class="input-group-text">
+                  <span class="fas fa-lock"></span>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <button type="submit" class="btn btn-primary btn-block">Kirish</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    {% include '../modules/scripts.html' %}
+
+    {% for message in messages %}
+      <script>
+        alert('{{ message }}')
+      </script>
+    {% endfor %}
+  </body>
+</html>

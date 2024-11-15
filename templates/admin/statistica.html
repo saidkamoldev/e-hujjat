@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Statistikasi</title>
+
+    {% include '../modules/links.html' %}
+
+  </head>
+
+
+  <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+      {% include './modules/preloader.html' %}
+
+      {% include './modules/navbar.html' %}
+
+      {% include './modules/sidebar.html' %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0">Statistika</h1>
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item active">Statistika</li>
+                </ol>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h5 class="m-0">Tashkilotlar statistikasi</h5>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="diagram"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row pb-5">
+              <div class="col">
+                <div class="card card-primary card-outline">
+                  <div class="card-header">
+                    <h5 class="m-0">So'rov / Kun</h5>
+                  </div>
+                  <div class="card-body">
+                    <form id="statForm" action="" method="get">
+                      <div class="form-group mb-2">
+                          <label for="time">Statistika davrini tanlang:</label>
+                          <select name="time" id="time" class="form-control" onchange="this.form.submit()">
+                              <option value="7" {% if request.GET.time == '7' %}selected{% endif %}>1 hafta</option>
+                              <option value="30" {% if request.GET.time == '30' %}selected{% endif %}>1 oy</option>
+                              <option value="all" {% if request.GET.time == 'all' %}selected{% endif %}>Barchasi</option>
+                          </select>
+                      </div>
+                    </form>
+                    <div>
+                      <canvas id="graph"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+
+    {% include '../modules/scripts.html' %}
+
+    <!-- Chart JS -->
+    <script src="/static/admin/plugins/chart.js/Chart.min.js"></script>
+    <script>
+      const COLORS = ['#36a2eb', '#ff6384', '#4bc0c0', '#ff9f40', '#9966ff', '#ffcd56', '#c9cbcf']
+      
+      const pie_labels = eval(`{{array_organizations|safe}}`)
+      const pie_data = eval(`{{array_count_organizations|safe}}`)
+      const pie_bgcolors = pie_labels.map(function (_, i) {
+        return COLORS[i % COLORS.length]
+      })
+      
+      const diagram = document.getElementById('diagram')
+      
+      const pie = new Chart(diagram, {
+        type: 'pie',
+        data: {
+          labels: pie_labels,
+          datasets: [
+            {
+              label: 'Hamma hujjatlar',
+              data: pie_data,
+              backgroundColor: pie_bgcolors,
+              hoverOffset: 4
+            }
+          ]
+        }
+      })
+      
+      const graph_labels = eval(`{{labels|safe}}`)
+      const graph_data = eval(`{{data|safe}}`)
+      
+      const graph = document.getElementById('graph')
+      
+      const line = new Chart(graph, {
+        type: 'line',
+        data: {
+          labels: graph_labels,
+          datasets: [
+            {
+              label: 'Haftadagi hujjatlar soni',
+              data: graph_data,
+              fill: false,
+              borderColor: COLORS[0],
+              tension: 1
+            }
+          ]
+        }
+      })
+    </script>
+    <script>
+      function isDateMoreThan30Days(dateString) {
+        const inputDate = new Date(dateString.replace(' ', 'T'))
+        const currentDate = new Date()
+      
+        const timeDifference = currentDate - inputDate
+      
+        const thirtyDaysInMillis = 30 * 24 * 60 * 60 * 1000
+      
+        return timeDifference >= thirtyDaysInMillis
+      }
+      document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#requests-table tbody tr').forEach(function (tr) {
+          let status = tr.dataset.status
+          let date = tr.dataset.date
+      
+          if (status == 'True') tr.classList.add('--succeed')
+          else if (isDateMoreThan30Days(date)) tr.classList.add('--expired')
+        })
+      })
+    </script>
+  </body>
+</html>

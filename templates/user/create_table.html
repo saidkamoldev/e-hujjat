@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Hujjat yaratish</title>
+
+    {% include '../modules/links.html' %}
+
+    <link rel="stylesheet" href="/static/admin/plugins/select2/css/select2.min.css" />
+    <link rel="stylesheet" href="/static/admin/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" />
+  </head>
+
+  <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
+    <div class="wrapper">
+      {% include './modules/preloader.html' %}
+
+      {% include './modules/navbar.html' %}
+
+      {% include './modules/sidebar.html' %}
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+          <div class="container-fluid">
+            <div class="row mb-2">
+              <div class="col-sm-6">
+                <h1 class="m-0">Hujjat yaratish</h1>
+              </div>
+              <!-- /.col -->
+              <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                  <li class="breadcrumb-item">
+                    <a href="/custom_admin/">Asosiy sahifa</a>
+                  </li>
+                  <li class="breadcrumb-item">
+                    <a href="/custom_admin/requests">Hujjatlar</a>
+                  </li>
+                  <li class="breadcrumb-item active">Hujjat yaratish</li>
+                </ol>
+              </div>
+              <!-- /.col -->
+            </div>
+            <!-- /.row -->
+          </div>
+          <!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+        <!-- Main content -->
+        <section class="content">
+          <div class="container-fluid">
+            <div class="row pb-5">
+              <div class="col">
+                <div class="card card-primary card-outline">
+                  <form method="post" action="{% url 'user_request_create' %}">
+                    {% csrf_token %}
+                    <div class="card-header">
+                      <h5 class="m-0">Hujjat yaratish</h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="form-group">
+                        <label for="organization">Tashkilotni tanlang<span class="text-danger">*</span></label>
+                        <select name="organization" id="organization" class="form-control select2" required>
+                          <option value="">---</option>
+                          {% for org in organizations %}
+                            <option value="{{ org.id }}">{{ org.title }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div> <!-- / card-body -->
+                    <div class="card-footer text-right">
+                      <button type="submit" class="btn btn-primary">Yaratish</button>
+                      <a class="btn btn-secondary" href="/custom_user/requests/">Bekor qilish</a>
+                    </div>
+                  </form>
+                </div> <!-- / card card-primary card-outline -->
+              </div>
+            </div>
+          </div>
+          <!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+      </div>
+      <!-- /.content-wrapper -->
+    </div>
+    <!-- ./wrapper -->
+
+    {% include '../modules/scripts.html' %}
+
+    <script src="/static/admin/plugins/select2/js/select2.full.min.js"></script>
+    <script>
+      $('.select2').select2({
+        theme: 'bootstrap4'
+      })
+    </script>
+  </body>
+</html>
